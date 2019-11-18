@@ -1,14 +1,7 @@
-# Title pending
+# Snake
 
-Description to be done
+Snake game
 
-## Dependencies
-- this
-- that
-- all these things
 
-## How to build
-
-1. find a suitable location
-2. get materials
-3. build
+## Build (Linux)
+`g++ src/*.cpp -o build/snake`
