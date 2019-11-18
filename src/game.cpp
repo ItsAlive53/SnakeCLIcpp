@@ -108,7 +108,7 @@ void SnakeGame::move() {
         return;
     }
 
-    SnakeGame::Position newPos = this->snake.back();
+    SnakeGame::Position newPos = {this->snake.back().x, this->snake.back().y};
 
     // Directional movement
     if (this->snakeDirection == SnakeGame::Direction::Left) {
@@ -118,12 +118,12 @@ void SnakeGame::move() {
     }
     if (this->snakeDirection == SnakeGame::Direction::Up) {
         // Loop through walls on hit
-        if (newPos.y == MAP_GRID_SIZE) newPos.y = 0;
+        if (newPos.y >= MAP_GRID_SIZE - 1) newPos.y = 0;
         else newPos.y++;
     }
     if (this->snakeDirection == SnakeGame::Direction::Right) {
         // Loop through walls on hit
-        if (newPos.x == MAP_GRID_SIZE) newPos.x = 0;
+        if (newPos.x >= MAP_GRID_SIZE - 1) newPos.x = 0;
         else newPos.x++;
     }
     if (this->snakeDirection == SnakeGame::Direction::Down) {
@@ -140,6 +140,9 @@ void SnakeGame::move() {
     } else if (this->map[newPos.y][newPos.x] == (uint8_t)SnakeGame::Tile::Snake) {
         // Snake hit itself, end game
         this->gameOver = true;
+    } else if (this->map[newPos.y][newPos.x] == (uint8_t)SnakeGame::Tile::Empty) {
+        this->map[newPos.y][newPos.x] = (uint8_t)SnakeGame::Tile::Snake;
+        this->snake.push_back({newPos.x, newPos.y});
     }
 
     // Remove tail bit when snake moves, if max size was reached
