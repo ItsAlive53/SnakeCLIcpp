@@ -161,11 +161,12 @@ void SnakeGame::spawnFruit() {
     int coordX = 0;
     int coordY = 0;
 
-    while (!found) {
-        std::vector<int> potentialCoordsX = getUniqueRandomNumbers(spawnedPotentials, 0, 31);
-        std::vector<int> potentialCoordsY = getUniqueRandomNumbers(spawnedPotentials, 0, 31);
+    std::vector<int> potentialCoordsX;
+    std::vector<int> potentialCoordsY;
 
-        int i = 0;
+    while (!found) {
+        potentialCoordsX = getUniqueRandomNumbers(spawnedPotentials, 0, MAP_GRID_SIZE - 1);
+        potentialCoordsY = getUniqueRandomNumbers(spawnedPotentials, 0, MAP_GRID_SIZE - 1);
 
         for (int i = 0; i < spawnedPotentials; i++) {
             coordX = potentialCoordsX[i];
@@ -176,6 +177,12 @@ void SnakeGame::spawnFruit() {
                 break;
             }
         }
+
+        // Empty arrays in case function needs to be run again
+        potentialCoordsX.clear();
+        potentialCoordsX.resize(0);
+        potentialCoordsY.clear();
+        potentialCoordsY.resize(0);
     }
 
     map[coordY][coordX] = (uint8_t)SnakeGame::Tile::Fruit;
