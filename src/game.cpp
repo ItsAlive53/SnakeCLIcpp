@@ -157,8 +157,8 @@ void SnakeGame::spawnFruit() {
         int i = 0;
 
         for (int i = 0; i < spawnedPotentials; i++) {
-            coordX = potentialCoordsX[0];
-            coordY = potentialCoordsY[0];
+            coordX = potentialCoordsX[i];
+            coordY = potentialCoordsY[i];
 
             if (map[coordY][coordX] == (uint8_t)SnakeGame::Tile::Empty) {
                 found = true;
