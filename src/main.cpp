@@ -36,6 +36,12 @@ int main() {
         // For now, tick on every frame
         game.Tick();
 
+        // Clear screen, or at least portion of it
+        printChar('\n', 32);
+
+        // Scoreboard
+        std::cout << "Score: " << (int)game.GetScore() << '\n';
+
         // Print upper grid border
         printChar(BORDER_CORNER, 1);
         printChar(BORDER_HORIZONTAL, game.GetGridSize());
