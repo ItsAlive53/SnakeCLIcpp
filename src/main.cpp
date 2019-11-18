@@ -13,6 +13,7 @@ const char BORDER_VERTICAL = '|';
 const char BORDER_HORIZONTAL = '-';
 const char BORDER_CORNER = '+';
 
+// How many milliseconds to wait before each frame
 const int64_t MIN_MS_FRAMETIME = 100;
 
 int main() {
@@ -32,6 +33,7 @@ int main() {
             continue;
         }
 
+        // For now, tick on every frame
         game.Tick();
 
         // Print upper grid border
@@ -59,11 +61,17 @@ int main() {
         printChar(BORDER_HORIZONTAL, game.GetGridSize());
         printChar(BORDER_CORNER, 1);
 
+        // Get timespan between start of loop, and here
         int64_t span = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start).count();
 
-        std::cout << '\n' << "Took "
+        // Print frametime for reference
+        std::cout << '\n'
         << (float)span / 1000000
-        << " ms for frame\n";
+        << " ms ("
+        << (float)nsSinceLast / 1000000
+        << " total ms) ("
+        << 1.f / ((float) nsSinceLast / 1000000000)
+        << " fps)";
 
         // Set timer back by millisecond timer converted to nanos
         nsSinceLast -= MIN_MS_FRAMETIME * 1000000;
