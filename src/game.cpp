@@ -91,6 +91,14 @@ bool SnakeGame::IsGameOver() {
     return this->gameOver;
 }
 
+uint16_t SnakeGame::GetGridSize() {
+    return (uint16_t)MAP_GRID_SIZE;
+}
+
+SnakeGame::Tile SnakeGame::GetTile(int x, int y) {
+    return (SnakeGame::Tile)this->map[y][x];
+}
+
 void SnakeGame::move() {
     if (this->snakeDirection == SnakeGame::Direction::None) return;
 

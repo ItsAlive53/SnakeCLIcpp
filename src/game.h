@@ -23,6 +23,8 @@ public:
     void ModifyScore(int);
     void ChangeDirection(Direction);
     bool IsGameOver();
+    uint16_t GetGridSize();
+    Tile GetTile(int x, int y);
 
 private:
     bool gameOver;
