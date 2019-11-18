@@ -14,7 +14,7 @@ const char BORDER_HORIZONTAL = '-';
 const char BORDER_CORNER = '+';
 
 // How many milliseconds to wait before each frame
-const int64_t MIN_MS_FRAMETIME = 100;
+const int64_t MIN_MS_FRAMETIME = 33;
 
 int main() {
     int64_t nsSinceLast = 0;
