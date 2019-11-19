@@ -157,6 +157,9 @@ void SnakeGame::move() {
         this->ModifyScore(1);
         this->spawnFruit();
 
+        // Grow snake
+        this->snakeLength++;
+
         // Move snake after score increment and new fruit spawn
         this->map[newPos.y][newPos.x] = (uint8_t)SnakeGame::Tile::Snake;
         this->snake.push_back({newPos.x, newPos.y});
