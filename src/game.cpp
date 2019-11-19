@@ -55,7 +55,7 @@ void SnakeGame::Reset() {
     // Reinitialise empty vector with snake part at the centre
     this->snake.clear();
     this->snake.resize(0);
-    this->snake.push_back({MapGridSizeVertical / 2, MapGridSizeHorizontal / 2});
+    this->snake.push_back({MapGridSizeHorizontal / 2, MapGridSizeVertical / 2});
 
     // Set starting snake length
     this->snakeLength = 3;
