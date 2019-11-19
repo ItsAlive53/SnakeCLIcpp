@@ -39,6 +39,9 @@ int main() {
         // Clear screen, or at least portion of it
         printChar('\n', 32);
 
+        // Basic game over display
+        if (game.IsGameOver()) std::cout << "Game Over! ";
+
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
 
