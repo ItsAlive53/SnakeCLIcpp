@@ -2,9 +2,9 @@
 #include <limits> // std::numeric_limits<T>
 #include <vector> // std::vector<T>
 
-#include "mylib.h"
+#include "mylib.h" // Helper functions
 
-#include "game.h"
+#include "game.h" // Class declaration
 
 // Default grid of 31x31
 SnakeGame::SnakeGame() : SnakeGame(31, 31) {}
@@ -16,6 +16,7 @@ SnakeGame::SnakeGame(int size) : SnakeGame(size, size) {}
 // Rectangle grid
 // Max 255, 255
 SnakeGame::SnakeGame(int x, int y) {
+    // Set grid sizes
     this->MapGridSizeHorizontal = x;
     this->MapGridSizeVertical = y;
 
@@ -39,9 +40,12 @@ void SnakeGame::Reset() {
         // Resize horizontal vectors
         map[i].resize(this->MapGridSizeHorizontal);
         for (uint8_t j = 0; j < (uint8_t)MapGridSizeHorizontal; j++) {
+            // Blank every tile at beginning
             this->map[i][j] = (uint8_t)SnakeGame::Tile::Empty;
         }
     }
+
+    // Create snake head at centre tile
     this->map[MapGridSizeVertical / 2][MapGridSizeHorizontal / 2] = (uint8_t)SnakeGame::Tile::Snake;
 
     // Reset basic vars
@@ -183,14 +187,18 @@ void SnakeGame::spawnFruit() {
     // How many random numbers to get every iteration
     int spawnedPotentials = 8;
 
+    // Has a suitable location been found?
     bool found = false;
 
+    // Temporary variables used to find where to spawn fruit
     int coordX = 0;
     int coordY = 0;
 
+    // Variables used to generate random numbers to iterate over
     std::vector<int> potentialCoordsX;
     std::vector<int> potentialCoordsY;
 
+    // Loop until suitable location found
     while (!found) {
         potentialCoordsX = getUniqueRandomNumbers(spawnedPotentials, 0, MapGridSizeHorizontal - 1);
         potentialCoordsY = getUniqueRandomNumbers(spawnedPotentials, 0, MapGridSizeVertical - 1);
@@ -200,6 +208,7 @@ void SnakeGame::spawnFruit() {
             coordY = potentialCoordsY[i];
 
             if (map[coordY][coordX] == (uint8_t)SnakeGame::Tile::Empty) {
+                // Suitable spawn point found, return to program
                 found = true;
                 break;
             }
@@ -212,5 +221,6 @@ void SnakeGame::spawnFruit() {
         potentialCoordsY.resize(0);
     }
 
+    // Set found tile to fruit
     map[coordY][coordX] = (uint8_t)SnakeGame::Tile::Fruit;
 }

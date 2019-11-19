@@ -1,11 +1,23 @@
 #include <iostream> // std::cout
+#include <chrono> // std::chrono::high_resolution_clock, std::chrono::duration_cast, std::chrono::nanoseconds
 #include <vector> // mylib.h
-#include <chrono>
 
-#include "mylib.h"
-#include "game.h"
+#include "mylib.h" // Helper functions
+#include "game.h" // Game instance class
 
-// Define grid characters
+
+// Button bit positions
+
+const char BUTTON_LEFT = 1;
+const char BUTTON_UP = 1 << 1;
+const char BUTTON_RIGHT = 1 << 2;
+const char BUTTON_DOWN = 1 << 3;
+const char BUTTON_EXIT = 1 << 7;
+
+// END Button bit positions
+
+// Grid characters
+
 const char TILE_EMPTY = ' ';
 const char TILE_SNAKE = 'S';
 const char TILE_FRUIT = 'o';
@@ -13,13 +25,21 @@ const char BORDER_VERTICAL = '|';
 const char BORDER_HORIZONTAL = '-';
 const char BORDER_CORNER = '+';
 
+// END Grid characters
+
+
+
 // How many milliseconds to wait before each frame
 const int64_t MIN_MS_FRAMETIME = 33;
 
 int main() {
+    // How many nanoseconds passed since last frame
     int64_t nsSinceLast = 0;
 
-    // Create new instance of game
+    // Could use bools, using bitmask for minimal memory savings
+    char buttonMask = 0;
+
+    // Game instance
     SnakeGame game = SnakeGame(63, 31);
 
     // Main loop
@@ -33,13 +53,24 @@ int main() {
             continue;
         }
 
-        // For now, tick on every frame
+        // TODO: Impplement input system
+
+        if (buttonMask & BUTTON_LEFT) game.ChangeDirection(SnakeGame::Direction::Left);
+        if (buttonMask & BUTTON_UP) game.ChangeDirection(SnakeGame::Direction::Up);
+        if (buttonMask & BUTTON_RIGHT) game.ChangeDirection(SnakeGame::Direction::Right);
+        if (buttonMask & BUTTON_DOWN) game.ChangeDirection(SnakeGame::Direction::Down);
+
+        // Break out of loop on exit button
+        if (buttonMask & BUTTON_EXIT) break;
+
+        // Tick on every frame
+        // (Unfortunately does tie tickrate to framerate, but since it's a command line game, it doesn't matter here)
         game.Tick();
 
         // Clear screen, or at least portion of it
         printChar('\n', 32);
 
-        // Basic game over display
+        // Basic game-over display
         if (game.IsGameOver()) std::cout << "Game Over! ";
 
         // Scoreboard
@@ -55,6 +86,8 @@ int main() {
         for (uint16_t i = 0; i < game.GetGridSizeVertical(); i++) {
             // Leftmost grid border
             std::cout << BORDER_VERTICAL;
+
+            // Print all columns in row i
             for (uint16_t j = 0; j < game.GetGridSizeHorizontal(); j++) {
                 // Print columns according to tile
                 SnakeGame::Tile tile = game.GetTile(j, i);
