@@ -20,7 +20,7 @@ int main() {
     int64_t nsSinceLast = 0;
 
     // Create new instance of game
-    SnakeGame game = SnakeGame();
+    SnakeGame game = SnakeGame(63, 31);
 
     // Main loop
     while (1) {
@@ -44,15 +44,15 @@ int main() {
 
         // Print upper grid border
         printChar(BORDER_CORNER, 1);
-        printChar(BORDER_HORIZONTAL, game.GetGridSize());
+        printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
         printChar(BORDER_CORNER, 1);
         std::cout << '\n';
 
         // Print all rows
-        for (uint16_t i = 0; i < game.GetGridSize(); i++) {
+        for (uint16_t i = 0; i < game.GetGridSizeVertical(); i++) {
             // Leftmost grid border
             std::cout << BORDER_VERTICAL;
-            for (uint16_t j = 0; j < game.GetGridSize(); j++) {
+            for (uint16_t j = 0; j < game.GetGridSizeHorizontal(); j++) {
                 // Print columns according to tile
                 SnakeGame::Tile tile = game.GetTile(j, i);
                 if (tile == SnakeGame::Tile::Empty) std::cout << TILE_EMPTY;
@@ -64,7 +64,7 @@ int main() {
         }
         // Print bottom grid border
         printChar(BORDER_CORNER, 1);
-        printChar(BORDER_HORIZONTAL, game.GetGridSize());
+        printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
         printChar(BORDER_CORNER, 1);
 
         // Get timespan between start of loop, and here

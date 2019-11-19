@@ -14,7 +14,15 @@ public:
     enum class Direction: uint8_t { Up = 1, Down = 2, Left = 3, Right = 4, None = 0 };
     enum class Tile: uint8_t { Empty = 0, Snake = 1, Fruit = 2 };
 
+    int MapGridSizeVertical;
+    int MapGridSizeHorizontal;
+
+    // Use default values
     SnakeGame();
+    // Create perfect square
+    SnakeGame(int);
+    // Create variable-size rectangle
+    SnakeGame(int, int);
 
     void Reset();
     void Tick();
@@ -23,12 +31,13 @@ public:
     void ModifyScore(int);
     void ChangeDirection(Direction);
     bool IsGameOver();
-    uint16_t GetGridSize();
+    uint16_t GetGridSizeHorizontal();
+    uint16_t GetGridSizeVertical();
     Tile GetTile(int x, int y);
 
 private:
     bool gameOver;
-    uint8_t map[31][31];
+    std::vector<std::vector<uint8_t>> map;
     uint16_t score;
     std::vector<Position> snake;
     uint16_t snakeLength;

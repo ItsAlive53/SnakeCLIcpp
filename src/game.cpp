@@ -6,9 +6,20 @@
 
 #include "game.h"
 
-const int MAP_GRID_SIZE = 31;
+// Default grid of 31x31
+SnakeGame::SnakeGame() : SnakeGame(31, 31) {}
 
-SnakeGame::SnakeGame() {
+// Square grid
+// Max 255
+SnakeGame::SnakeGame(int size) : SnakeGame(size, size) {}
+
+// Rectangle grid
+// Max 255, 255
+SnakeGame::SnakeGame(int x, int y) {
+    this->MapGridSizeHorizontal = x;
+    this->MapGridSizeVertical = y;
+
+    // Create starting grid
     Reset();
 }
 
@@ -22,12 +33,16 @@ void SnakeGame::Reset() {
     *   1: Spawn
     *
     * */
-    for (uint8_t i = 0; i < (uint8_t)MAP_GRID_SIZE; i++) {
-        for (uint8_t j = 0; j < (uint8_t)MAP_GRID_SIZE; j++) {
+    // Resize vertical vector
+    map.resize(this->MapGridSizeVertical);
+    for (uint8_t i = 0; i < (uint8_t)MapGridSizeVertical; i++) {
+        // Resize horizontal vectors
+        map[i].resize(this->MapGridSizeHorizontal);
+        for (uint8_t j = 0; j < (uint8_t)MapGridSizeHorizontal; j++) {
             this->map[i][j] = (uint8_t)SnakeGame::Tile::Empty;
         }
     }
-    this->map[MAP_GRID_SIZE / 2][MAP_GRID_SIZE / 2] = (uint8_t)SnakeGame::Tile::Snake;
+    this->map[MapGridSizeVertical / 2][MapGridSizeHorizontal / 2] = (uint8_t)SnakeGame::Tile::Snake;
 
     // Reset basic vars
     this->score = 0;
@@ -36,7 +51,7 @@ void SnakeGame::Reset() {
     // Reinitialise empty vector with snake part at the centre
     this->snake.clear();
     this->snake.resize(0);
-    this->snake.push_back({MAP_GRID_SIZE / 2, MAP_GRID_SIZE / 2});
+    this->snake.push_back({MapGridSizeVertical / 2, MapGridSizeHorizontal / 2});
 
     // Set starting snake length
     this->snakeLength = 3;
@@ -91,8 +106,12 @@ bool SnakeGame::IsGameOver() {
     return this->gameOver;
 }
 
-uint16_t SnakeGame::GetGridSize() {
-    return (uint16_t)MAP_GRID_SIZE;
+uint16_t SnakeGame::GetGridSizeVertical() {
+    return (uint16_t)this->MapGridSizeVertical;
+}
+
+uint16_t SnakeGame::GetGridSizeHorizontal() {
+    return (uint16_t)this->MapGridSizeHorizontal;
 }
 
 SnakeGame::Tile SnakeGame::GetTile(int x, int y) {
@@ -113,22 +132,22 @@ void SnakeGame::move() {
     // Directional movement
     if (this->snakeDirection == SnakeGame::Direction::Left) {
         // Loop through walls on hit
-        if (newPos.x == 0) newPos.x = MAP_GRID_SIZE;
+        if (newPos.x == 0) newPos.x = MapGridSizeHorizontal;
         else newPos.x--;
     }
     if (this->snakeDirection == SnakeGame::Direction::Up) {
         // Loop through walls on hit
-        if (newPos.y >= MAP_GRID_SIZE - 1) newPos.y = 0;
+        if (newPos.y >= MapGridSizeVertical - 1) newPos.y = 0;
         else newPos.y++;
     }
     if (this->snakeDirection == SnakeGame::Direction::Right) {
         // Loop through walls on hit
-        if (newPos.x >= MAP_GRID_SIZE - 1) newPos.x = 0;
+        if (newPos.x >= MapGridSizeHorizontal - 1) newPos.x = 0;
         else newPos.x++;
     }
     if (this->snakeDirection == SnakeGame::Direction::Down) {
         // Loop through walls on hit
-        if (newPos.y == 0) newPos.y = MAP_GRID_SIZE;
+        if (newPos.y == 0) newPos.y = MapGridSizeVertical;
         else newPos.y--;
     }
     // END Directional movement
@@ -170,8 +189,8 @@ void SnakeGame::spawnFruit() {
     std::vector<int> potentialCoordsY;
 
     while (!found) {
-        potentialCoordsX = getUniqueRandomNumbers(spawnedPotentials, 0, MAP_GRID_SIZE - 1);
-        potentialCoordsY = getUniqueRandomNumbers(spawnedPotentials, 0, MAP_GRID_SIZE - 1);
+        potentialCoordsX = getUniqueRandomNumbers(spawnedPotentials, 0, MapGridSizeHorizontal - 1);
+        potentialCoordsY = getUniqueRandomNumbers(spawnedPotentials, 0, MapGridSizeVertical - 1);
 
         for (int i = 0; i < spawnedPotentials; i++) {
             coordX = potentialCoordsX[i];
