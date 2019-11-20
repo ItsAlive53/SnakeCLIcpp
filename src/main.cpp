@@ -70,6 +70,11 @@ int main() {
         if (GetKeyState(VK_DOWN) & 0x8000) buttonMask |= BUTTON_DOWN;
         if (GetKeyState(VK_RIGHT) & 0x8000) buttonMask |= BUTTON_RIGHT;
 
+        // Restart game on R, if game has ended
+        if (game.IsGameOver())
+            if (GetKeyState('R') & 0x8000)
+                game.Reset();
+
         // Exit out of the loop on ESC
         if (GetKeyState(VK_ESCAPE) & 0x8000) break;
 #endif
@@ -97,7 +102,7 @@ int main() {
         printChar('\n', 32);
 
         // Basic game-over display
-        if (game.IsGameOver()) std::cout << "Game Over! ";
+        if (game.IsGameOver()) std::cout << "Game Over, press R to restart!\n";
 
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
