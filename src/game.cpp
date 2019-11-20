@@ -136,13 +136,13 @@ void SnakeGame::move() {
     // Directional movement
     if (this->snakeDirection == SnakeGame::Direction::Left) {
         // Loop through walls on hit
-        if (newPos.x == 0) newPos.x = MapGridSizeHorizontal;
+        if (newPos.x == 0) newPos.x = MapGridSizeHorizontal - 1;
         else newPos.x--;
     }
     if (this->snakeDirection == SnakeGame::Direction::Up) {
         // Loop through walls on hit
-        if (newPos.y >= MapGridSizeVertical - 1) newPos.y = 0;
-        else newPos.y++;
+        if (newPos.y == 0) newPos.y = MapGridSizeVertical - 1;
+        else newPos.y--;
     }
     if (this->snakeDirection == SnakeGame::Direction::Right) {
         // Loop through walls on hit
@@ -151,8 +151,8 @@ void SnakeGame::move() {
     }
     if (this->snakeDirection == SnakeGame::Direction::Down) {
         // Loop through walls on hit
-        if (newPos.y == 0) newPos.y = MapGridSizeVertical;
-        else newPos.y--;
+        if (newPos.y >= MapGridSizeVertical - 1) newPos.y = 0;
+        else newPos.y++;
     }
     // END Directional movement
 
