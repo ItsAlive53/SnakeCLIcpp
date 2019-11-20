@@ -63,6 +63,8 @@ int main() {
         if (GetKeyState('A') & 0x8000) buttonMask |= BUTTON_LEFT;
         if (GetKeyState('S') & 0x8000) buttonMask |= BUTTON_DOWN;
         if (GetKeyState('D') & 0x8000) buttonMask |= BUTTON_RIGHT;
+
+        // Arrow keys
         if (GetKeyState(VK_UP) & 0x8000) buttonMask |= BUTTON_UP;
         if (GetKeyState(VK_LEFT) & 0x8000) buttonMask |= BUTTON_LEFT;
         if (GetKeyState(VK_DOWN) & 0x8000) buttonMask |= BUTTON_DOWN;
@@ -73,6 +75,9 @@ int main() {
 #endif
 
 #ifdef __linux__
+        // TODO: Implement linux-supported input later
+        // Would probably need a rewrite to run in a window, rather than a terminal
+        // Non-blocking terminal input without waiting for delimiter, apparently fairly complicated
         std::cout << "Input is not currently supported on linux-based systems\n";
 #endif
 
