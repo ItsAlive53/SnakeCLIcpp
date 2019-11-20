@@ -24,6 +24,10 @@ const char BUTTON_EXIT = 1 << 7;
 
 const char TILE_EMPTY = ' ';
 const char TILE_SNAKE = 'S';
+const char TILE_SNAKE_HEAD_LEFT = '<';
+const char TILE_SNAKE_HEAD_UP = '^';
+const char TILE_SNAKE_HEAD_RIGHT = '>';
+const char TILE_SNAKE_HEAD_DOWN = 'V';
 const char TILE_FRUIT = 'o';
 const char BORDER_VERTICAL = '|';
 const char BORDER_HORIZONTAL = '-';
@@ -138,7 +142,24 @@ int main() {
                 // Print columns according to tile
                 SnakeGame::Tile tile = game.GetTile(j, i);
                 if (tile == SnakeGame::Tile::Empty) std::cout << TILE_EMPTY;
-                if (tile == SnakeGame::Tile::Snake) std::cout << TILE_SNAKE;
+                if (tile == SnakeGame::Tile::Snake) {
+                    // Check if tile is snake head
+                    SnakeGame::Position headPos = game.GetSnakeHeadPos();
+                    if (i == (uint16_t)headPos.y && j == (uint16_t)headPos.x) {
+                        // If tile is snake head, print directional head tile
+                        SnakeGame::Direction snakeDir = game.GetSnakeDirection();
+                        if (snakeDir == SnakeGame::Direction::Left) std::cout << TILE_SNAKE_HEAD_LEFT;
+                        if (snakeDir == SnakeGame::Direction::Up) std::cout << TILE_SNAKE_HEAD_UP;
+                        if (snakeDir == SnakeGame::Direction::Right) std::cout << TILE_SNAKE_HEAD_RIGHT;
+                        if (snakeDir == SnakeGame::Direction::Down) std::cout << TILE_SNAKE_HEAD_DOWN;
+
+                        // In case game hasn't started yet, print snake body tile
+                        if (snakeDir == SnakeGame::Direction::None) std::cout << TILE_SNAKE;
+                    } else {
+                        // Not snake head, print snake body tile
+                        std::cout << TILE_SNAKE;
+                    }
+                }
                 if (tile == SnakeGame::Tile::Fruit) std::cout << TILE_FRUIT;
             }
             // Rightmost grid border

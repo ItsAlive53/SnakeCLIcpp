@@ -58,7 +58,7 @@ void SnakeGame::Reset() {
     this->snake.push_back({MapGridSizeHorizontal / 2, MapGridSizeVertical / 2});
 
     // Set starting snake length
-    this->snakeLength = 3;
+    this->snakeLength = 4;
     this->snakeDirection = SnakeGame::Direction::None;
 
     // Spawn first fruit
@@ -120,6 +120,15 @@ uint16_t SnakeGame::GetGridSizeHorizontal() {
 
 SnakeGame::Tile SnakeGame::GetTile(int x, int y) {
     return (SnakeGame::Tile)this->map[y][x];
+}
+
+SnakeGame::Direction SnakeGame::GetSnakeDirection() {
+    return (SnakeGame::Direction)this->snakeDirection;
+}
+
+SnakeGame::Position SnakeGame::GetSnakeHeadPos() {
+    // Make sure to return copy instead of reference
+    return {this->snake.back().x, this->snake.back().y};
 }
 
 void SnakeGame::move() {

@@ -44,6 +44,10 @@ public:
     uint16_t GetGridSizeVertical();
     // Returns tile at (x, y)
     Tile GetTile(int x, int y);
+    // Returns read-only snake direction
+    Direction GetSnakeDirection();
+    // Returns read-only snake head position
+    Position GetSnakeHeadPos();
 
 private:
     // Has the player died
