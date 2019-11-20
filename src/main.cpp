@@ -83,7 +83,6 @@ int main() {
         // TODO: Implement linux-supported input later
         // Would probably need a rewrite to run in a window, rather than a terminal
         // Non-blocking terminal input without waiting for delimiter, apparently fairly complicated
-        std::cout << "Input is not currently supported on linux-based systems\n";
 #endif
 
         if (buttonMask & BUTTON_LEFT) game.ChangeDirection(SnakeGame::Direction::Left);
@@ -100,6 +99,11 @@ int main() {
 
         // Clear screen, or at least portion of it
         printChar('\n', 32);
+
+#ifdef __linux__
+        // Warn user if running in a linux-based terminal
+        std::cout << "Input is not currently supported on linux-based systems\n";
+#endif
 
         // Basic game-over display
         if (game.IsGameOver()) std::cout << "Game Over, press R to restart!\n";
