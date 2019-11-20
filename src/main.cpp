@@ -2,6 +2,10 @@
 #include <chrono> // std::chrono::high_resolution_clock, std::chrono::duration_cast, std::chrono::nanoseconds
 #include <vector> // mylib.h
 
+#ifdef _WIN32
+#include <Windows.h> // GetKeyState()
+#endif
+
 #include "mylib.h" // Helper functions
 #include "game.h" // Game instance class
 
@@ -53,7 +57,24 @@ int main() {
             continue;
         }
 
-        // TODO: Impplement input system
+#ifdef _WIN32
+        // Check high bit of GetKeyState, if it's set, key is down, WASD/arrows = set correct bit of button mask
+        if (GetKeyState('W') & 0x8000) buttonMask |= BUTTON_UP;
+        if (GetKeyState('A') & 0x8000) buttonMask |= BUTTON_LEFT;
+        if (GetKeyState('S') & 0x8000) buttonMask |= BUTTON_DOWN;
+        if (GetKeyState('D') & 0x8000) buttonMask |= BUTTON_RIGHT;
+        if (GetKeyState(VK_UP) & 0x8000) buttonMask |= BUTTON_UP;
+        if (GetKeyState(VK_LEFT) & 0x8000) buttonMask |= BUTTON_LEFT;
+        if (GetKeyState(VK_DOWN) & 0x8000) buttonMask |= BUTTON_DOWN;
+        if (GetKeyState(VK_RIGHT) & 0x8000) buttonMask |= BUTTON_RIGHT;
+
+        // Exit out of the loop on ESC
+        if (GetKeyState(VK_ESCAPE) & 0x8000) break;
+#endif
+
+#ifdef __linux__
+        std::cout << "Input is not currently supported on linux-based systems\n";
+#endif
 
         if (buttonMask & BUTTON_LEFT) game.ChangeDirection(SnakeGame::Direction::Left);
         if (buttonMask & BUTTON_UP) game.ChangeDirection(SnakeGame::Direction::Up);
