@@ -83,6 +83,17 @@ int main() {
         // TODO: Implement linux-supported input later
         // Would probably need a rewrite to run in a window, rather than a terminal
         // Non-blocking terminal input without waiting for delimiter, apparently fairly complicated
+
+        // As a temporary fix, use completely random inputs
+        if (nsSinceLast % 200 == 11) {
+            game.ChangeDirection(SnakeGame::Direction::Right);
+        } else if (nsSinceLast % 200 == 16) {
+            game.ChangeDirection(SnakeGame::Direction::Up);
+        } else if (nsSinceLast % 200 == 8) {
+            game.ChangeDirection(SnakeGame::Direction::Down);
+        } else if (nsSinceLast % 200 == 7) {
+            game.ChangeDirection(SnakeGame::Direction::Left);
+        }
 #endif
 
         if (buttonMask & BUTTON_LEFT) game.ChangeDirection(SnakeGame::Direction::Left);
