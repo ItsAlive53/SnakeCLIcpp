@@ -118,6 +118,11 @@ int main() {
         // (Unfortunately does tie tickrate to framerate, but since it's a command line game, it doesn't matter here)
         game.Tick();
 
+        // If game ends, show last frame and quit drawing until restart
+        if (game.IsGameOver() && gameOverScreen) {
+            continue;
+        }
+
         // Clear screen, or at least portion of it
         printChar('\n', 32);
 
@@ -128,11 +133,6 @@ int main() {
 
         // Basic game-over display
         if (game.IsGameOver()) std::cout << "Game Over, press R to restart!\n";
-
-        // If game ends, show last frame and quit drawing until restart
-        if (game.IsGameOver() && gameOverScreen) {
-            continue;
-        }
 
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
@@ -196,6 +196,9 @@ int main() {
         // Set timer back by millisecond timer converted to nanos
         nsSinceLast -= MIN_MS_FRAMETIME * 1000000;
         nsSinceLast += span;
+
+        // If game ended, draw screen once and set bool
+        if (game.IsGameOver()) gameOverScreen = true;
 
         // Print newline and flush output stream at the end
         std::cout << std::endl;
