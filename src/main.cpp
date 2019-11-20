@@ -47,6 +47,9 @@ int main() {
     // Could use bools, using bitmask for minimal memory savings
     char buttonMask = 0;
 
+    // Has game over screen been drawn
+    bool gameOverScreen = false;
+
     // Game instance
     SnakeGame game = SnakeGame(63, 31);
 
@@ -75,9 +78,12 @@ int main() {
         if (GetKeyState(VK_RIGHT) & 0x8000) buttonMask |= BUTTON_RIGHT;
 
         // Restart game on R, if game has ended
-        if (game.IsGameOver())
-            if (GetKeyState('R') & 0x8000)
+        if (game.IsGameOver()) {
+            if (GetKeyState('R') & 0x8000) {
                 game.Reset();
+                gameOverScreen = false;
+            }
+        }
 
         // Exit out of the loop on ESC
         if (GetKeyState(VK_ESCAPE) & 0x8000) break;
@@ -122,6 +128,11 @@ int main() {
 
         // Basic game-over display
         if (game.IsGameOver()) std::cout << "Game Over, press R to restart!\n";
+
+        // If game ends, show last frame and quit drawing until restart
+        if (game.IsGameOver() && gameOverScreen) {
+            continue;
+        }
 
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
