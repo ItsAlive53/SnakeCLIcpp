@@ -84,7 +84,7 @@ std::vector<int> sortVectorInt(std::vector<int> vec) {
         int min = vec[0];
         int pos = 0;
 
-        for (int ii = 0; ii < vec.size(); ii++) {
+        for (int ii = 0; ii < sz; ii++) {
             if (vec[ii] < min) {
                 min = vec[ii];
                 pos = ii;
