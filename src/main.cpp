@@ -104,6 +104,9 @@ int main() {
         // Restart game on R, if game has ended
         if (game.IsGameOver()) {
             if (GetKeyState('R') & 0x8000) {
+                // Windows-only variable, comment here as a reminder for when cross-platform input gets implemented
+                initialDraw = true;
+
                 game.Reset();
                 gameOverScreen = false;
             }
