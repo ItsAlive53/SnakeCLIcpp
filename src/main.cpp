@@ -35,6 +35,7 @@ const char BORDER_CORNER = '+';
 
 // END Grid characters
 
+#ifdef _WIN32
 // x is the column, y is the row. The origin (0,0) is top-left.
 void setCursorPosition(int x, int y) {
     static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -42,6 +43,18 @@ void setCursorPosition(int x, int y) {
     COORD coord = {(SHORT)x, (SHORT)y};
     SetConsoleCursorPosition(hOut, coord);
 }
+
+// Sets console cursor to hidden
+void hideCmdCursor() {
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_CURSOR_INFO cursorInfo;
+
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = false;
+    SetConsoleCursorInfo(out, &cursorInfo);
+}
+#endif
 
 // How many milliseconds to wait before each frame
 const int64_t MIN_MS_FRAMETIME = 1000 / 15;
@@ -56,6 +69,9 @@ int main() {
 #ifdef _WIN32
     // Has initial game screen been drawn
     bool initialDraw = true;
+
+    // Hide cursor to avoid flicker
+    hideCmdCursor();
 #endif
 
     // Has game over screen been drawn
