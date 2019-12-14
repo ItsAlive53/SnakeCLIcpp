@@ -61,12 +61,6 @@ int main() {
         // Get time at start of loop
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
-        if (nsSinceLast / 1000000 < MIN_MS_FRAMETIME) {
-            // If timer for next frame hasn't been passed, do nothing
-            nsSinceLast += std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start).count();
-            continue;
-        }
-
 #ifdef _WIN32
         // Check high bit of GetKeyState, if it's set, key is down, WASD/arrows = set correct bit of button mask
         if (GetKeyState('W') & 0x8000) buttonMask |= BUTTON_UP;
@@ -114,6 +108,12 @@ int main() {
 
         // Break out of loop on exit button
         if (buttonMask & BUTTON_EXIT) break;
+
+        if (nsSinceLast / 1000000 < MIN_MS_FRAMETIME) {
+            // If timer for next frame hasn't been passed, do nothing
+            nsSinceLast += std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start).count();
+            continue;
+        }
 
         // Tick on every frame
         // (Unfortunately does tie tickrate to framerate, but since it's a command line game, it doesn't matter here)
