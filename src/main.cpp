@@ -55,6 +55,9 @@ int main() {
 
     // Main loop
     while (1) {
+        // Reset button mask
+        buttonMask = 0;
+
         // Get time at start of loop
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
