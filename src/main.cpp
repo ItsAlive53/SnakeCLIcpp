@@ -38,7 +38,7 @@ const char BORDER_CORNER = '+';
 
 
 // How many milliseconds to wait before each frame
-const int64_t MIN_MS_FRAMETIME = 33;
+const int64_t MIN_MS_FRAMETIME = 1000 / 2;
 
 int main() {
     // How many nanoseconds passed since last frame
@@ -122,7 +122,7 @@ int main() {
         }
 
         // Clear screen, or at least portion of it
-        printChar('\n', 32);
+        printChar('\n', 8);
 
 #ifndef _WIN32
         // Warn user if running unsupported system
