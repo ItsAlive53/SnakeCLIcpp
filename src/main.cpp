@@ -35,7 +35,13 @@ const char BORDER_CORNER = '+';
 
 // END Grid characters
 
-
+// x is the column, y is the row. The origin (0,0) is top-left.
+void setCursorPosition(int x, int y) {
+    static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    std::cout.flush();
+    COORD coord = {(SHORT)x, (SHORT)y};
+    SetConsoleCursorPosition(hOut, coord);
+}
 
 // How many milliseconds to wait before each frame
 const int64_t MIN_MS_FRAMETIME = 1000 / 2;
@@ -124,16 +130,16 @@ int main() {
             continue;
         }
 
+#ifdef _WIN32
+        // Use windows call to redraw over earlier screen to avoid unnecessary writes
+        setCursorPosition(0, 0);
+#elif
         // Clear screen, or at least portion of it
         printChar('\n', 8);
 
-#ifndef _WIN32
         // Warn user if running unsupported system
         std::cout << "Input is currently Windows-only, using random inputs\n";
 #endif
-
-        // Basic game-over display
-        if (game.IsGameOver()) std::cout << "Game Over, press R to restart!\n";
 
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
@@ -198,8 +204,12 @@ int main() {
         nsSinceLast -= MIN_MS_FRAMETIME * 1000000;
         nsSinceLast += span;
 
-        // If game ended, draw screen once and set bool
-        if (game.IsGameOver()) gameOverScreen = true;
+        // Basic game-over display
+        if (game.IsGameOver()) {
+            std::cout << "Game Over, press R to restart!\n";
+            // If game ended, draw screen once and set bool
+            gameOverScreen = true;
+        }
 
         // Print newline and flush output stream at the end
         std::cout << std::endl;
