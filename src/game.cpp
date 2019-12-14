@@ -199,6 +199,14 @@ void SnakeGame::spawnFruit() {
     // How many random numbers to get every iteration
     int spawnedPotentials = 8;
 
+    // Clamp random number count to map size, in case map size is lower than 8
+    if (spawnedPotentials > MapGridSizeHorizontal - 1) {
+        spawnedPotentials = MapGridSizeHorizontal - 1;
+    }
+    if (spawnedPotentials > MapGridSizeVertical - 1) {
+        spawnedPotentials = MapGridSizeVertical - 1;
+    }
+
     // Has a suitable location been found?
     bool found = false;
 
