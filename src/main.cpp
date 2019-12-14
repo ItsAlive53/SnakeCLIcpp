@@ -57,7 +57,7 @@ int main() {
     bool gameOverScreen = false;
 
     // Game instance
-    SnakeGame game = SnakeGame(15, 7);
+    SnakeGame game = SnakeGame(31, 15);
 
     // Main loop
     while (1) {
@@ -199,6 +199,11 @@ int main() {
         << " total ms) ("
         << 1.f / ((float) nsSinceLast / 1000000000)
         << " fps)";
+
+#ifdef _WIN32
+        // If using windows-only drawing logic, make sure to clear fps counter trail
+        printChar(' ', 16);
+#endif
 
         // Set timer back by millisecond timer converted to nanos
         nsSinceLast -= MIN_MS_FRAMETIME * 1000000;
