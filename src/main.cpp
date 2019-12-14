@@ -51,7 +51,7 @@ int main() {
     bool gameOverScreen = false;
 
     // Game instance
-    SnakeGame game = SnakeGame(63, 31);
+    SnakeGame game = SnakeGame(15, 7);
 
     // Main loop
     while (1) {
