@@ -44,7 +44,7 @@ void setCursorPosition(int x, int y) {
 }
 
 // How many milliseconds to wait before each frame
-const int64_t MIN_MS_FRAMETIME = 1000 / 2;
+const int64_t MIN_MS_FRAMETIME = 1000 / 15;
 
 int main() {
     // How many nanoseconds passed since last frame
@@ -216,7 +216,7 @@ int main() {
         }
 
         // Set cursor under game field after drawing
-        setCursorPosition(0, (int)game.GetGridSizeVertical() + 3);
+        setCursorPosition(0, (int)game.GetGridSizeVertical() + 2);
 #else
         // Print upper grid border
         printChar(BORDER_CORNER, 1);
@@ -287,7 +287,7 @@ int main() {
 
         // Basic game-over display
         if (game.IsGameOver()) {
-            std::cout << "Game Over, press R to restart!\n";
+            std::cout << "\nGame Over, press R to restart!\n";
             // If game ended, draw screen once and set bool
             gameOverScreen = true;
         }
