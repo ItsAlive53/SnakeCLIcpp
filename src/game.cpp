@@ -77,6 +77,12 @@ void SnakeGame::Tick() {
     // Quit ticking if game over state reached
     if (this->gameOver) return;
 
+#ifdef _WIN32
+    // Clear vector between frames
+    this->ChangedTiles.clear();
+    this->ChangedTiles.resize(0);
+#endif
+
     this->move();
 }
 
@@ -193,6 +199,12 @@ void SnakeGame::move() {
         this->snake.push_back({newPos.x, newPos.y});
     }
 
+#ifdef _WIN32
+    // Mark new head and old tail tiles as changed
+    this->ChangedTiles.push_back({newPos.x, newPos.y});
+    this->ChangedTiles.push_back({this->snake[0].x, this->snake[0].y});
+#endif
+
     // Remove tail bit when snake moves, if max size was reached
     if (this->snake.size() > this->snakeLength) {
         this->map[this->snake[0].y][this->snake[0].x] = (uint8_t)SnakeGame::Tile::Empty;
@@ -248,4 +260,9 @@ void SnakeGame::spawnFruit() {
 
     // Set found tile to fruit
     map[coordY][coordX] = (uint8_t)SnakeGame::Tile::Fruit;
+
+#ifdef _WIN32
+    // Mark tile as changed
+    this->ChangedTiles.push_back({static_cast<uint8_t>(coordX), static_cast<uint8_t>(coordY)});
+#endif
 }
