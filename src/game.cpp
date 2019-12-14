@@ -42,6 +42,11 @@ void SnakeGame::Reset() {
         for (uint8_t j = 0; j < (uint8_t)MapGridSizeHorizontal; j++) {
             // Blank every tile at beginning
             this->map[i][j] = (uint8_t)SnakeGame::Tile::Empty;
+
+#ifdef _WIN32
+            // Mark every tile as changed initially
+            this->ChangedTiles.push_back({j, i});
+#endif
         }
     }
 

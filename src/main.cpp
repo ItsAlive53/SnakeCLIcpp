@@ -133,7 +133,7 @@ int main() {
 #ifdef _WIN32
         // Use windows call to redraw over earlier screen to avoid unnecessary writes
         setCursorPosition(0, 0);
-#elif
+#else
         // Clear screen, or at least portion of it
         printChar('\n', 8);
 
@@ -150,6 +150,9 @@ int main() {
         printChar(BORDER_CORNER, 1);
         std::cout << '\n';
 
+#ifdef _WIN32
+        // TODO
+#else
         // Print all rows
         for (uint16_t i = 0; i < game.GetGridSizeVertical(); i++) {
             // Leftmost grid border
@@ -183,6 +186,8 @@ int main() {
             // Rightmost grid border
             std::cout << BORDER_VERTICAL << '\n';
         }
+#endif
+
         // Print bottom grid border
         printChar(BORDER_CORNER, 1);
         printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());

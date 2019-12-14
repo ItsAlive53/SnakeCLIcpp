@@ -49,6 +49,11 @@ public:
     // Returns read-only snake head position
     Position GetSnakeHeadPos();
 
+#ifdef _WIN32
+    // Helper variable for only redrawing changed tiles on windows
+    std::vector<Position> ChangedTiles;
+#endif
+
 private:
     // Has the player died
     bool gameOver;
