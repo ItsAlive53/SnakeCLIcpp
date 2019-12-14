@@ -53,6 +53,11 @@ int main() {
     // Could use bools, using bitmask for minimal memory savings
     char buttonMask = 0;
 
+#ifdef _WIN32
+    // Has initial game screen been drawn
+    bool initialDraw = true;
+#endif
+
     // Has game over screen been drawn
     bool gameOverScreen = false;
 
@@ -144,15 +149,81 @@ int main() {
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
 
+#ifdef _WIN32
+        // Draw empty game field on initial draw
+        if (initialDraw) {
+            // Print upper grid border
+            printChar(BORDER_CORNER, 1);
+            printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
+            printChar(BORDER_CORNER, 1);
+            std::cout << '\n';
+
+            // Print all rows
+            for (uint16_t i = 0; i < game.GetGridSizeVertical(); i++) {
+                // Leftmost grid border
+                std::cout << BORDER_VERTICAL;
+
+                // Print all columns in row i
+                for (uint16_t j = 0; j < game.GetGridSizeHorizontal(); j++) {
+                    SnakeGame::Tile tile = game.GetTile(j, i);
+                    if (tile == SnakeGame::Tile::Empty) std::cout << TILE_EMPTY;
+                    // Snake direction should always be none on initial draw, safe to ignore direction checks
+                    if (tile == SnakeGame::Tile::Snake) std::cout << TILE_SNAKE;
+                    if (tile == SnakeGame::Tile::Fruit) std::cout << TILE_FRUIT;
+                }
+                // Rightmost grid border
+                std::cout << BORDER_VERTICAL << '\n';
+            }
+
+            // Print bottom grid border
+            printChar(BORDER_CORNER, 1);
+            printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
+            printChar(BORDER_CORNER, 1);
+
+            initialDraw = false;
+        } // initialDraw
+
+        // Redraw all changed tiles
+        for (size_t i = 0; i < game.ChangedTiles.size(); i++) {
+            // Get changed tile position and tile data
+            SnakeGame::Position posToDraw = {game.ChangedTiles[i].x, game.ChangedTiles[i].y};
+            SnakeGame::Tile tile = game.GetTile(posToDraw.x, posToDraw.y);
+
+            // Move cursor to tile to redraw
+            setCursorPosition(posToDraw.x + 1, posToDraw.y + 2);
+
+            // Redraw tile based on tile type
+            if (tile == SnakeGame::Tile::Empty) std::cout << TILE_EMPTY;
+            if (tile == SnakeGame::Tile::Snake) {
+                // Check if tile is snake head
+                SnakeGame::Position headPos = game.GetSnakeHeadPos();
+                if (posToDraw.y == (uint16_t)headPos.y && posToDraw.x == (uint16_t)headPos.x) {
+                    // If tile is snake head, print directional head tile
+                    SnakeGame::Direction snakeDir = game.GetSnakeDirection();
+                    if (snakeDir == SnakeGame::Direction::Left) std::cout << TILE_SNAKE_HEAD_LEFT;
+                    if (snakeDir == SnakeGame::Direction::Up) std::cout << TILE_SNAKE_HEAD_UP;
+                    if (snakeDir == SnakeGame::Direction::Right) std::cout << TILE_SNAKE_HEAD_RIGHT;
+                    if (snakeDir == SnakeGame::Direction::Down) std::cout << TILE_SNAKE_HEAD_DOWN;
+
+                    // In case game hasn't started yet, print snake body tile
+                    if (snakeDir == SnakeGame::Direction::None) std::cout << TILE_SNAKE;
+                } else {
+                    // Not snake head, print snake body tile
+                    std::cout << TILE_SNAKE;
+                }
+            }
+            if (tile == SnakeGame::Tile::Fruit) std::cout << TILE_FRUIT;
+        }
+
+        // Set cursor under game field after drawing
+        setCursorPosition(0, (int)game.GetGridSizeVertical() + 3);
+#else
         // Print upper grid border
         printChar(BORDER_CORNER, 1);
         printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
         printChar(BORDER_CORNER, 1);
         std::cout << '\n';
 
-#ifdef _WIN32
-        // TODO
-#else
         // Print all rows
         for (uint16_t i = 0; i < game.GetGridSizeVertical(); i++) {
             // Leftmost grid border
@@ -186,12 +257,12 @@ int main() {
             // Rightmost grid border
             std::cout << BORDER_VERTICAL << '\n';
         }
-#endif
 
         // Print bottom grid border
         printChar(BORDER_CORNER, 1);
         printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
         printChar(BORDER_CORNER, 1);
+#endif
 
         // Get timespan between start of loop, and here
         int64_t span = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start).count();

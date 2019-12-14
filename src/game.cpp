@@ -179,6 +179,15 @@ void SnakeGame::move() {
     }
     // END Directional movement
 
+#ifdef _WIN32
+    // Mark new head, old head, and old tail tiles as changed
+    this->ChangedTiles.push_back({newPos.x, newPos.y});
+    this->ChangedTiles.push_back({this->snake[0].x, this->snake[0].y});
+
+    // Mark old head position to redraw as snake body
+    if (this->snake.size() > 1) this->ChangedTiles.push_back({this->snake.back().x, this->snake.back().y});
+#endif
+
     if (this->map[newPos.y][newPos.x] == (uint8_t)SnakeGame::Tile::Fruit) {
         // Increment score by 1 and spawn new fruit
         this->ModifyScore(1);
@@ -198,12 +207,6 @@ void SnakeGame::move() {
         this->map[newPos.y][newPos.x] = (uint8_t)SnakeGame::Tile::Snake;
         this->snake.push_back({newPos.x, newPos.y});
     }
-
-#ifdef _WIN32
-    // Mark new head and old tail tiles as changed
-    this->ChangedTiles.push_back({newPos.x, newPos.y});
-    this->ChangedTiles.push_back({this->snake[0].x, this->snake[0].y});
-#endif
 
     // Remove tail bit when snake moves, if max size was reached
     if (this->snake.size() > this->snakeLength) {
