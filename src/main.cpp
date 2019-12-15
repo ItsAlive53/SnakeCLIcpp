@@ -38,14 +38,19 @@ const char BORDER_CORNER = '+';
 #ifdef _WIN32
 // x is the column, y is the row. The origin (0,0) is top-left.
 void setCursorPosition(int x, int y) {
-    static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    // Get output handle
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Flush standard output stream, since output gets modified outside the buffer
     std::cout.flush();
+    
     COORD coord = {(SHORT)x, (SHORT)y};
-    SetConsoleCursorPosition(hOut, coord);
+    SetConsoleCursorPosition(out, coord);
 }
 
 // Sets console cursor to hidden
 void hideCmdCursor() {
+    // Get output handle
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
     CONSOLE_CURSOR_INFO cursorInfo;
