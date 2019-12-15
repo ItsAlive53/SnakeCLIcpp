@@ -4,7 +4,7 @@
 
 #ifdef _WIN32
 #include <Windows.h> // GetKeyState()
-#endif
+#endif // _WIN32
 
 #include "mylib.h" // Helper functions
 #include "game.h" // Game instance class
@@ -54,7 +54,7 @@ void hideCmdCursor() {
     cursorInfo.bVisible = false;
     SetConsoleCursorInfo(out, &cursorInfo);
 }
-#endif
+#endif // _WIN32
 
 // How many milliseconds to wait before each frame
 const int64_t MIN_MS_FRAMETIME = 1000 / 15;
@@ -72,7 +72,7 @@ int main() {
 
     // Hide cursor to avoid flicker
     hideCmdCursor();
-#endif
+#endif // _WIN32
 
     // Has game over screen been drawn
     bool gameOverScreen = false;
@@ -114,7 +114,7 @@ int main() {
 
         // Exit out of the loop on ESC
         if (GetKeyState(VK_ESCAPE) & 0x8000) break;
-#else
+#else // _WIN32
         // TODO: Implement cross-platform input later
         // Would probably need a rewrite to run in a window, rather than a terminal
         // Non-blocking terminal input without waiting for delimiter, apparently fairly complicated
@@ -129,7 +129,7 @@ int main() {
         } else if (nsSinceLast % 200 == 7) {
             game.ChangeDirection(SnakeGame::Direction::Left);
         }
-#endif
+#endif // _WIN32
 
         if (buttonMask & BUTTON_LEFT) game.ChangeDirection(SnakeGame::Direction::Left);
         if (buttonMask & BUTTON_UP) game.ChangeDirection(SnakeGame::Direction::Up);
@@ -157,13 +157,13 @@ int main() {
 #ifdef _WIN32
         // Use windows call to redraw over earlier screen to avoid unnecessary writes
         setCursorPosition(0, 0);
-#else
+#else // _WIN32
         // Clear screen, or at least portion of it
         printChar('\n', 8);
 
         // Warn user if running unsupported system
         std::cout << "Input is currently Windows-only, using random inputs\n";
-#endif
+#endif // _WIN32
 
         // Scoreboard
         std::cout << "Score: " << (int)game.GetScore() << '\n';
@@ -236,7 +236,7 @@ int main() {
 
         // Set cursor under game field after drawing
         setCursorPosition(0, (int)game.GetGridSizeVertical() + 2);
-#else
+#else // _WIN32
         // Print upper grid border
         printChar(BORDER_CORNER, 1);
         printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
@@ -281,7 +281,7 @@ int main() {
         printChar(BORDER_CORNER, 1);
         printChar(BORDER_HORIZONTAL, game.GetGridSizeHorizontal());
         printChar(BORDER_CORNER, 1);
-#endif
+#endif // _WIN32
 
         // Get timespan between start of loop, and here
         int64_t span = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start).count();
@@ -298,7 +298,7 @@ int main() {
 #ifdef _WIN32
         // If using windows-only drawing logic, make sure to clear fps counter trail
         printChar(' ', 16);
-#endif
+#endif // _WIN32
 
         // Set timer back by millisecond timer converted to nanos
         nsSinceLast -= MIN_MS_FRAMETIME * 1000000;

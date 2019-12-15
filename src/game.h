@@ -52,7 +52,7 @@ public:
 #ifdef _WIN32
     // Helper variable for only redrawing changed tiles on windows
     std::vector<Position> ChangedTiles;
-#endif
+#endif // _WIN32
 
 private:
     // Has the player died

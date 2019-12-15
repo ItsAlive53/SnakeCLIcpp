@@ -46,7 +46,7 @@ void SnakeGame::Reset() {
 #ifdef _WIN32
             // Mark every tile as changed initially
             this->ChangedTiles.push_back({j, i});
-#endif
+#endif // _WIN32
         }
     }
 
@@ -81,7 +81,7 @@ void SnakeGame::Tick() {
     // Clear vector between frames
     this->ChangedTiles.clear();
     this->ChangedTiles.resize(0);
-#endif
+#endif // _WIN32
 
     this->move();
 }
@@ -186,7 +186,7 @@ void SnakeGame::move() {
 
     // Mark old head position to redraw as snake body
     if (this->snake.size() > 1) this->ChangedTiles.push_back({this->snake.back().x, this->snake.back().y});
-#endif
+#endif // _WIN32
 
     if (this->map[newPos.y][newPos.x] == (uint8_t)SnakeGame::Tile::Fruit) {
         // Increment score by 1 and spawn new fruit
@@ -267,5 +267,5 @@ void SnakeGame::spawnFruit() {
 #ifdef _WIN32
     // Mark tile as changed
     this->ChangedTiles.push_back({static_cast<uint8_t>(coordX), static_cast<uint8_t>(coordY)});
-#endif
+#endif // _WIN32
 }
